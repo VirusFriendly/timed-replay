@@ -10,10 +10,12 @@ if(len(sys.argv) != 2):
 lastPktTime=0
 sentTime=0
 packets = rdpcap(sys.argv[1])
-# read host IPs and interfaces from config file
-# hostA 1.0.0.5 eth1
-# hostB 2.0.0.5 eth2
-# etc...
+
+with open('.timedreplay', 'r') as x:
+    config = x.readlines()
+
+for line in config:
+    exec(line)
 
 for packet in packets:
     while 1:
