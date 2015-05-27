@@ -7,15 +7,11 @@ if(len(sys.argv) != 2):
     print "Usage: ", sys.argv[0], "<pcap file>"
     exit()
 
+print "packet.time system.time ip.src ip.dst"
+
 lastPktTime=0
 sentTime=0
 packets = rdpcap(sys.argv[1])
-
-#load config file
-with open('.timedreplay', 'r') as x:
-    config = " ".join(line.strip() for line in x)
-
-exec(config)
 
 for packet in packets:
     while 1:
@@ -25,9 +21,8 @@ for packet in packets:
         if (lastPktTime == 0) or (packetgap < timegap) or (packet.time < lastPktTime):
             lastPktTime = packet.time
             sentTime = time.time()
-            # match the packet source to interface via config
-            # send packet via sendp()
-            print packet.time, " ", time.time();
+            print packet.time, " ", time.time(), packet[IP].src, packet[IP].dst;
+            send(packet[IP])
             break
         else:
             time.sleep(packetgap - timegap)
