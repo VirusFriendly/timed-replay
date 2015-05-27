@@ -11,11 +11,11 @@ lastPktTime=0
 sentTime=0
 packets = rdpcap(sys.argv[1])
 
+#load config file
 with open('.timedreplay', 'r') as x:
-    config = x.readlines()
+    config = " ".join(line.strip() for line in x)
 
-for line in config:
-    exec(line)
+exec(config)
 
 for packet in packets:
     while 1:
